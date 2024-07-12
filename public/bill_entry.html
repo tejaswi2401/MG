@@ -305,7 +305,7 @@
     
             // Function to populate project select options
             function populateProjects() {
-                fetchFromServer('http://localhost:8032/projects').then(projects => {
+                fetchFromServer('https://mgplanners.onrender.com:8032/projects').then(projects => {
                     var projectSelect = document.getElementById('projectSelect');
                     projectSelect.innerHTML = '';
                     projects.forEach(project => {
@@ -318,7 +318,7 @@
     
             // Function to populate material select options
             function populateMaterials() {
-    fetchFromServer('http://localhost:8032/materials').then(materials => {
+    fetchFromServer('https://mgplanners.onrender.com:8032/materials').then(materials => {
         var materialSelect = document.getElementById('materialSelect');
         var searchMaterialSelect = document.getElementById('searchMaterial');
         materialSelect.innerHTML = '';
@@ -340,7 +340,7 @@
                 var projectName = document.getElementById('projectSelect').value;
                 displayBillEntries(projectName);
                 var encodedProjectName = encodeURIComponent(projectName);
-    var url = `http://localhost:8032/projects/${encodedProjectName}/expected_budget`;
+    var url = `https://mgplanners.onrender.com:8032/projects/${encodedProjectName}/expected_budget`;
 
     // Fetch expected budget based on project name
     fetchFromServer(url)
@@ -361,7 +361,7 @@
 
     console.log('Fetching bill entries for project:', projectName); // Log project name
 
-    fetchFromServer(`http://localhost:8032/bill_entries/projectName?projectName=${projectName}&material=${searchMaterial}&date=${searchDate}`)
+    fetchFromServer(`https://mgplanners.onrender.com:8032/bill_entries/projectName?projectName=${projectName}&material=${searchMaterial}&date=${searchDate}`)
         .then(billEntries => {
             console.log('Fetched bill entries:', billEntries); // Log fetched bill entries
 
@@ -401,7 +401,7 @@
             var encodedProjectName = encodeURIComponent(projectName);
             console.log('Fetching budget for project:', projectName); // Log budget fetch
 
-            fetch(`http://localhost:8032/projects/${encodedProjectName}/expected_budget`)
+            fetch(`https://mgplanners.onrender.com:8032/projects/${encodedProjectName}/expected_budget`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -437,7 +437,7 @@
         paymentMethod: paymentMethod.value
     };
 
-    fetch('http://localhost:8032/save-entry', {
+    fetch('https://mgplanners.onrender.com:8032/save-entry', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -462,7 +462,7 @@
     
             // Function to edit bill entry
             function editBillEntry(entryId) {
-    fetchFromServer(`http://localhost:8032/bill_entries/${entryId}`).then(entry => {
+    fetchFromServer(`https://mgplanners.onrender.com:8032/bill_entries/${entryId}`).then(entry => {
         document.getElementById('billDate').value = entry.date;
         document.getElementById('materialSelect').value = entry.material;
         document.getElementById('description').value = entry.description;
@@ -489,7 +489,7 @@
                     paymentMethod: document.getElementById('paymentMethod').value
                 };
     
-                sendToServer(`http://localhost:8032/bill_entries/${entryId}`, updatedEntry, 'PUT').then(response => {
+                sendToServer(`https://mgplanners.onrender.com:8032/bill_entries/${entryId}`, updatedEntry, 'PUT').then(response => {
                     loadProjectDetails();
                 });
             }
@@ -500,7 +500,7 @@
                 displayBillEntries(projectName);
             }
             function deleteBillEntry(entryId) {
-    sendToServer(`http://localhost:8032/delete_bill_entries/${entryId}`, {}, 'DELETE')
+    sendToServer(`https://mgplanners.onrender.com:8032/delete_bill_entries/${entryId}`, {}, 'DELETE')
         .then(response => {
             loadProjectDetails(); // Example function to reload data after deletion
         })
@@ -511,7 +511,7 @@
     
             // Function to show deleted entries
             function showDeletedEntries() {
-    fetchFromServer('http://localhost:8032/delete_bill_entries')
+    fetchFromServer('https://mgplanners.onrender.com:8032/delete_bill_entries')
         .then(deletedEntries => {
             var deletedEntriesTableBody = document.getElementById('deletedEntriesTableBody');
             deletedEntriesTableBody.innerHTML = '';
@@ -545,7 +545,7 @@
 
             // Function to restore deleted entry
             function restoreBillEntry(entryId) {
-    sendToServer(`http://localhost:8032/restore_entry`, { id: entryId }, 'POST')
+    sendToServer(`https://mgplanners.onrender.com:8032/restore_entry`, { id: entryId }, 'POST')
         .then(response => {
             showDeletedEntries();
             loadProjectDetails();
