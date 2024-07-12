@@ -137,7 +137,7 @@
             var projectName = document.getElementById('searchProjectName').value;
 
             // Fetch project details from server based on projectName
-            fetch(`https://mgplanners.onrender.com:8032/projects/name/${projectName}`)
+            fetch(`/projects/name/${projectName}`)
                 .then(response => response.json())
                 .then(project => {
                     if (project) {
@@ -172,7 +172,7 @@
             };
 
             // Send update request to server
-            fetch('https://mgplanners.onrender.com:8032/projects/name/' + updatedProjectName, {
+            fetch('/projects/name/' + updatedProjectName, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

@@ -5,7 +5,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     var password = document.getElementById('password').value;
     var errorMessage = document.getElementById('error-message');
 
-    fetch('https://mgplanners.onrender.com:8032/login', {
+    fetch('/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
