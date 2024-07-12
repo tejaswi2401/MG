@@ -146,7 +146,7 @@
                 expected_budget: parseFloat(expectedBudget)  // Ensure expectedBudget is parsed as a float
             };
 
-            fetch('https://mgplanners.onrender.com:8032/projects', {
+            fetch('http://localhost:8032/projects', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

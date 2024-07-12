@@ -17,6 +17,18 @@ app.use(cors({
 }));
 
 
+
+// connecting MongoDB
+const mongoose = require('mongoose');
+mongoose.connection.on('connected', () => console.log('connected'));
+mongoose.connection.on('open', () => console.log('open'));
+mongoose.connection.on('disconnected', () => console.log('disconnected'));
+mongoose.connection.on('reconnected', () => console.log('reconnected'));
+mongoose.connection.on('disconnecting', () => console.log('disconnecting'));
+mongoose.connection.on('close', () => console.log('close'));
+mongoose.connect('mongodb+srv://bhavyasrijuvvanapudi:1234@mg.p4sgsa4.mongodb.net/?retryWrites=true&w=majority&appName=mg');
+const {User} = require('./DbSchemas')
+
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -231,39 +243,83 @@ app.delete('/projects/name/:name', (req, res) => {
 });
 
 // Endpoint to handle user login
-app.post('/login', (req, res) => {
+// app.post('/login', (req, res) => {
+//     const { username, password } = req.body;
+
+//     db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
+//         if (err) {
+//             console.error('SQLite query error:', err.message);
+//             return res.status(500).json({ error: 'Internal Server Error' });
+//         }
+        
+//         if (!row) {
+//             return res.status(401).json({ error: 'Username not registered. Please sign up.' });
+//         }
+
+//         if (password !== row.password) {
+//             return res.status(401).json({ error: 'Incorrect password.' });
+//         }
+
+//         res.status(200).json({ message: 'Login successful!' });
+//     });
+// });
+app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
-        if (err) {
-            console.error('SQLite query error:', err.message);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        
-        if (!row) {
+    try {
+        // Find the user by username
+        const user = await User.findOne({ username });
+
+        if (!user) {
             return res.status(401).json({ error: 'Username not registered. Please sign up.' });
         }
 
-        if (password !== row.password) {
+        // Check if the provided password matches the stored password
+        if (password !== user.password) {
             return res.status(401).json({ error: 'Incorrect password.' });
         }
 
+        // Send a success response if the password matches
         res.status(200).json({ message: 'Login successful!' });
-    });
+    } catch (err) {
+        console.error('MongoDB query error:', err.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
-// Endpoint to handle user signup
-app.post('/signup', (req, res) => {
+
+
+
+// // Endpoint to handle user signup
+// app.post('/signup', (req, res) => {
+//     const { username, password } = req.body;
+
+//     db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], function(err) {
+//         if (err) {
+//             console.error('SQLite insert error:', err.message);
+//             return res.status(500).json({ error: 'Failed to create user' });
+//         }
+
+//         res.status(200).json({ message: 'User created successfully!' });
+//     });
+// });
+// Define the signup controller function
+app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
 
-    db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], function(err) {
-        if (err) {
-            console.error('SQLite insert error:', err.message);
-            return res.status(500).json({ error: 'Failed to create user' });
-        }
+    try {
+        // Create a new user instance
+        const newUser = new User({ username, password });
 
+        // Save the user to the MongoDB database
+        await newUser.save();
+
+        // Send a success response
         res.status(200).json({ message: 'User created successfully!' });
-    });
+    } catch (err) {
+        console.error('MongoDB insert error:', err.message);
+        res.status(500).json({ error: 'Failed to create user' });
+    }
 });
 
 // Endpoint to handle password reset

@@ -260,7 +260,7 @@
         });
 
         function fetchProjects() {
-            fetch('https://mgplanners.onrender.com:8032/projects')
+            fetch('http://localhost:8032/projects')
                 .then(response => response.json())
                 .then(projects => {
                     const projectList = document.getElementById('project-list');
@@ -275,7 +275,7 @@
         }
 
         function fetchMaterials() {
-            fetch('https://mgplanners.onrender.com:8032/materials')
+            fetch('http://localhost:8032/materials')
                 .then(response => response.json())
                 .then(materials => {
                     const materialFilter = document.getElementById('material-filter');
@@ -302,7 +302,7 @@
                 return;
             }
 
-            fetch(`https://mgplanners.onrender.com:8032/bill_entries/projectName?projectName=${projectName}`)
+            fetch(`http://localhost:8032/bill_entries/projectName?projectName=${projectName}`)
                 .then(response => response.json())
                 .then(reports => {
                     const reportList = document.getElementById('report-list');
@@ -329,7 +329,7 @@
             const material = document.getElementById('material-filter').value;
             const date = document.getElementById('date-filter').value;
 
-            let url = `https://mgplanners.onrender.com:8032/bill_entries/projectName?projectName=${projectName}`;
+            let url = `http://localhost:8032/bill_entries/projectName?projectName=${projectName}`;
             if (material !== 'all') {
                 url += `&material=${material}`;
             }
